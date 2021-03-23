@@ -1,0 +1,37 @@
+{
+    "name": "arnold-scene-source",
+    "displayName": "Arnold Scene Source",
+    "description": "Syntax highlighting for Arnold renderer scene source (.ass)",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.54.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "ass",
+                "aliases": [
+                    "Arnold",
+                    "ass"
+                ],
+                "extensions": [
+                    ".ass"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "ass",
+                "scopeName": "source.ass",
+                "path": "./syntaxes/ass.tmLanguage.json"
+            }
+        ]
+    },
+    "devDependencies": {
+        "js-yaml": "^4.0.0"
+    }
+}

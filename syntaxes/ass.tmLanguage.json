@@ -1,0 +1,318 @@
+{
+  "name": "Arnold ASS file",
+  "scopeName": "source.ass",
+  "fileTypes": [
+    "ass"
+  ],
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#commands"
+    },
+    {
+      "include": "#expressions"
+    },
+    {
+      "include": "#node"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "expressions": {
+      "patterns": [
+        {
+          "match": "\\\\(?=\\n)",
+          "name": "punctuation.separator.continuation.ass",
+          "include": "#braces"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.ass",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.ass",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b(?i:(0x\\h+)L)",
+          "name": "constant.numeric.integer.hexadecimal.long.ass"
+        },
+        {
+          "match": "\\b(?i:(0x\\h+))",
+          "name": "constant.numeric.integer.hexadecimal.ass"
+        },
+        {
+          "match": "\\b(?i:(0b[01]+)L)",
+          "name": "constant.numeric.integer.binary.long.ass"
+        },
+        {
+          "match": "\\b(?i:(0b[01]+))",
+          "name": "constant.numeric.integer.binary.ass"
+        },
+        {
+          "match": "\\b(?i:(0[o]?[0-7]+)L)",
+          "name": "constant.numeric.integer.octal.long.ass"
+        },
+        {
+          "match": "\\b(?i:(0[o]?[0-7]+))",
+          "name": "constant.numeric.integer.octal.ass"
+        },
+        {
+          "match": "\\b(?i:(((\\d+(\\.(?=[^[:alpha:]_])\\d*)?|(?<=[^[:alnum:]_])\\.\\d+)(e[\\-\\+]?\\d+)?))J)",
+          "name": "constant.numeric.complex.ass"
+        },
+        {
+          "match": "\\b(?i:(\\d+\\.\\d*(e[\\-\\+]?\\d+)?))(?=[^[:alpha:]_])",
+          "name": "constant.numeric.float.ass"
+        },
+        {
+          "match": "(?<=[^[:alnum:]_])(?i:(\\.\\d+(e[\\-\\+]?\\d+)?))",
+          "name": "constant.numeric.float.ass"
+        },
+        {
+          "match": "\\b(?i:(\\d+e[\\-\\+]?\\d+))",
+          "name": "constant.numeric.float.ass"
+        },
+        {
+          "match": "\\b(?i:([1-9]+[0-9]*|0)L)",
+          "name": "constant.numeric.integer.decimal.long.ass"
+        },
+        {
+          "match": "\\b([1-9]+[0-9]*|0)",
+          "name": "constant.numeric.integer.decimal.ass"
+        }
+      ]
+    },
+    "comment": {
+      "begin": "(^[ \\t]+)?(?=#)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.whitespace.comment.leading.ass"
+        }
+      },
+      "end": "(?!\\G)",
+      "patterns": [
+        {
+          "begin": "#",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.ass"
+            }
+          },
+          "end": "\\n",
+          "name": "comment.line.number-sign.ass"
+        }
+      ]
+    },
+    "node": {
+      "patterns": [
+        {
+          "name": "entity.name.function.ass",
+          "match": "^[a-zA-Z0-9_]+\\s*\\n"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "include": "#matrix"
+        },
+        {
+          "include": "#user_variable"
+        },
+        {
+          "include": "#node_variable_motion"
+        },
+        {
+          "include": "#node_variable"
+        }
+      ]
+    },
+    "node_variable": {
+      "patterns": [
+        {
+          "match": "^\\s+([a-zA-Z0-9_]+)\\s+([\\\"\\|@\\/a-zA-Z0-9_\\.:\\[\\]\\s]*)",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.ass"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "include": "#variable_value"
+                }
+              ],
+              "name": "string.unquoted.ass"
+            }
+          }
+        }
+      ]
+    },
+    "node_variable_motion": {
+      "patterns": [
+        {
+          "match": "^\\s+([a-zA-Z0-9_]+)\\s+([0-9]+)\\s+([0-9]+)\\s+(FLOAT|INT|STRING|ARRAY|NODE|BYTE|UINT|VECTOR|VECTOR2 |b85UINT|b85VECTOR|b85VECTOR2|b85MATRIX]+)$",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.ass"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "include": "#numbers"
+                }
+              ]
+            },
+            "3": {
+              "patterns": [
+                {
+                  "include": "#numbers"
+                }
+              ]
+            },
+            "4": {
+              "patterns": [
+                {
+                  "include": "#types"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "variable_value": {
+      "patterns": [
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#bool"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#strings"
+        }
+      ]
+    },
+    "user_variable": {
+      "patterns": [
+        {
+          "match": "^\\s+([a-zA-Z]+)\\s+([a-zA-Z0-9\\_]+)\\s+([a-zA-Z]+)\\s+([A-Z]+)",
+          "captures": {
+            "1": {
+              "name": "storage.type.ass"
+            },
+            "2": {
+              "name": "variable.parameter.ass"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "include": "#operators"
+                }
+              ]
+            },
+            "4": {
+              "patterns": [
+                {
+                  "include": "#types"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "matrix": {
+      "patterns": [
+        {
+          "match": "\\s([\\-0-9\\.\\e]+\\s){4}",
+          "name": "constant.numeric.complex.ass"
+        },
+        {
+          "match": "\\s(matrix)",
+          "name": "variable.parameter.ass"
+        }
+      ]
+    },
+    "bool": {
+      "patterns": [
+        {
+          "match": "\\b(y|Y|yes|Yes|YES|n|N|no|No|NO |true|True|TRUE|false|False|FALSE |on|On|ON|off|Off|OFF)\\b",
+          "name": "constant.language.boolean.ass"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "\\b(constant|uniform|varying|indexed)\\b",
+          "name": "keyword.other.ass"
+        },
+        {
+          "include": "#types"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "match": "\\b(FLOAT|INT|STRING|ARRAY|NODE|BYTE|UINT|VECTOR|VECTOR2 |b85UINT|b85VECTOR|b85VECTOR2|b85MATRIX)\\b",
+          "name": "storage.type.ass"
+        }
+      ]
+    },
+    "braces": [
+      {
+        "match": "(\\{)(\\*)(\\})",
+        "name": "meta.block.ass",
+        "captures": {
+          "1": {
+            "name": "punctuation.definition.block.begin.ass"
+          },
+          "2": {
+            "name": "keyword.operator.ass"
+          },
+          "3": {
+            "name": "punctuation.definition.block.end.ass"
+          }
+        }
+      },
+      {
+        "begin": "\\{",
+        "name": "punctuation.definition.block.begin.ass"
+      },
+      {
+        "end": "(\\})",
+        "endCaptures": {
+          "1": {
+            "name": "punctuation.definition.block.end.ass"
+          },
+          "2": {
+            "name": "invalid.illegal.ass"
+          }
+        }
+      },
+      {
+        "match": "\\\\[\\\\{}n]",
+        "name": "constant.character.escape.ass"
+      },
+      {
+        "include": "commands"
+      }
+    ]
+  }
+}
