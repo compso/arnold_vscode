@@ -123,9 +123,7 @@ repository:
 
   node_variable:
     patterns:
-      # - match: ^\s*([a-zA-Z_\.]+[0-9]*[a-zA-Z_\.]*)\s
-      # \s+(?[\"\|0-9]+)\s+(?[a-zA-Z0-9_]+)
-      - match: ^\s+([a-zA-Z0-9_]+)\s+([\"\|@\/a-zA-Z0-9_\.:\[\]\s]*)
+      - match: ^\s+([a-zA-Z0-9_]+)\s+([\-\"\|@\/a-zA-Z0-9_\.\*\+:\[\]\s]*)
         captures:
             '1':
               name: variable.parameter.ass
@@ -136,8 +134,7 @@ repository:
 
   node_variable_motion:
     patterns:
-      - match: ^\s+([a-zA-Z0-9_]+)\s+([0-9]+)\s+([0-9]+)\s+(FLOAT|INT|STRING|ARRAY|NODE|BYTE|UINT|VECTOR|VECTOR2
-             |b85UINT|b85VECTOR|b85VECTOR2|b85MATRIX]+)$
+      - match: ^\s+([a-zA-Z0-9_]+)\s+([0-9]+)\s+([0-9]+)\s+([A-Z0-9]+)$
         captures:
             '1':
               name: variable.parameter.ass
@@ -160,24 +157,23 @@ repository:
 
   user_variable:
     patterns:
-    - match: ^\s+([a-zA-Z]+)\s+([a-zA-Z0-9\_]+)\s+([a-zA-Z]+)\s+([A-Z]+)
+    - match: ^\s+([a-zA-Z]+)\s+([a-zA-Z0-9\_\:]+)\s+([a-zA-Z]+)\s+([A-Z]+)
       captures:
           '1':
             name: storage.type.ass
           '2':
             name: variable.parameter.ass
-          '3':
-            patterns:
-              - include: '#operators'
+          '3':            
+            name: keyword.ass
           '4':
             patterns:
               - include: '#types'
 
   matrix:
     patterns:
-      - match: \s([\-0-9\.\e]+\s){4}
+      - match: \s+([0-9\-\.e]+\s){4}
         name: constant.numeric.complex.ass
-      - match: \s(matrix)
+      - match: \s+(matrix)
         name: variable.parameter.ass
 
   bool:
